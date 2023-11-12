@@ -410,7 +410,11 @@ def regsiter_apis(app: App, task_runner: TaskRunner):
             return {"success": False, "message": "Task result is not available"}
 
         result: dict = json.loads(task.result)
-        infotexts = result["infotexts"]
+
+        infotexts = result.get("infotexts", None)
+
+        if infotexts is None and "geninfo" in result:
+            infotexts = result.get("geninfo").get("infotexts", None)
 
         if zip:
             zip_buffer = io.BytesIO()
